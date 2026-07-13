@@ -1,0 +1,29 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: messaging-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/messaging
+    username: postgres
+    password: devpass
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: 86400000

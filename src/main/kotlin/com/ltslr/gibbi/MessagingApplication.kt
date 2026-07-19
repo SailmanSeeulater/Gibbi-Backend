@@ -1,4 +1,4 @@
-package com.ltslr.shma
+package com.ltslr.gibbi
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

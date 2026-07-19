@@ -1,4 +1,4 @@
-package com.ltslr.shma.auth
+package com.ltslr.gibbi.auth
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

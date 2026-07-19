@@ -1,4 +1,4 @@
-package com.ltslr.shma.keys
+package com.ltslr.gibbi.keys
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty

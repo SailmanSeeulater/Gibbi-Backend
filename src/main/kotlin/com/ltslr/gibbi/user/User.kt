@@ -1,4 +1,4 @@
-package com.ltslr.shma.user
+package com.ltslr.gibbi.user
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

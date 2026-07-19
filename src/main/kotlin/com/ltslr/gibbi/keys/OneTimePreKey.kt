@@ -1,4 +1,4 @@
-package com.ltslr.shma.keys
+package com.ltslr.gibbi.keys
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

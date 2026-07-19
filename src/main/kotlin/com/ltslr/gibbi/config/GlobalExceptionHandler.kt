@@ -1,4 +1,4 @@
-package com.ltslr.shma.config
+package com.ltslr.gibbi.config
 
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError

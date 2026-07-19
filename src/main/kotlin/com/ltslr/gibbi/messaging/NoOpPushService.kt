@@ -1,4 +1,4 @@
-package com.ltslr.shma.messaging
+package com.ltslr.gibbi.messaging
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

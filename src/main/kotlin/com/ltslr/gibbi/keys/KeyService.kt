@@ -1,4 +1,4 @@
-package com.ltslr.shma.keys
+package com.ltslr.gibbi.keys
 
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service

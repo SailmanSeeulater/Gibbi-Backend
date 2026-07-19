@@ -1,4 +1,4 @@
-package com.ltslr.shma.messaging
+package com.ltslr.gibbi.messaging
 
 import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository

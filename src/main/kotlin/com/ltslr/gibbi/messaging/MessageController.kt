@@ -1,4 +1,4 @@
-package com.ltslr.shma.messaging
+package com.ltslr.gibbi.messaging
 
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -9,14 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import tools.jackson.databind.ObjectMapper
 import java.util.Base64
+import java.time.Instant
 
 @RestController
 @RequestMapping("/messages")
 class MessageController(
     private val mailboxService: MailboxService,
     private val pushService: PushService,
-) {
+    private val webSocketHandler: GibbiWebSocketHandler,
+    private val objectMapper: ObjectMapper,
+) {    
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun send(
@@ -24,13 +28,24 @@ class MessageController(
         @Valid @RequestBody request: SendMessageRequest,
     ) {
         val from = authentication.name
-        val bytes = Base64.getDecoder().decode(request.ciphertext)
 
-        // TODO(step 5): if recipient has a live WebSocket, deliver instantly instead.
+        val envelope = MessageEnvelope(
+            from = from,
+            ciphertext = request.ciphertext,
+            type = request.type,
+            createdAt = Instant.now(),
+        )
+        val payload = objectMapper.writeValueAsString(
+            mapOf("type" to "message", "envelope" to envelope)
+        )
+
+        if (webSocketHandler.deliver(request.to, payload)) return
+
+        //Offline: Store and forward + wake the device
         mailboxService.store(
             toUsername = request.to,
             fromUsername = from,
-            ciphertext = bytes,
+            ciphertext = Base64.getDecoder().decode(request.ciphertext),
             messageType = request.type,
         )
         pushService.notifyNewMessage(toUsername = request.to, fromUsername = from)

@@ -1,4 +1,4 @@
-package com.ltslr.shma.auth
+package com.ltslr.gibbi.auth
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

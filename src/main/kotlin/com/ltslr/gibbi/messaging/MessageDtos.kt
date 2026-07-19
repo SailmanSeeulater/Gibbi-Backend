@@ -1,4 +1,4 @@
-package com.ltslr.shma.messaging
+package com.ltslr.gibbi.messaging
 
 import jakarta.validation.constraints.NotBlank
 import java.time.Instant

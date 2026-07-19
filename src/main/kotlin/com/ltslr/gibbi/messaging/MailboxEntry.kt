@@ -1,4 +1,4 @@
-package com.ltslr.shma.messaging
+package com.ltslr.gibbi.messaging
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

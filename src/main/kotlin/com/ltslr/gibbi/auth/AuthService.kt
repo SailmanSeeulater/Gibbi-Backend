@@ -1,7 +1,7 @@
-package com.ltslr.shma.auth
+package com.ltslr.gibbi.auth
 
-import com.ltslr.shma.user.User
-import com.ltslr.shma.user.UserRepository
+import com.ltslr.gibbi.user.User
+import com.ltslr.gibbi.user.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

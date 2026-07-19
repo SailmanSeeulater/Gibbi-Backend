@@ -1,6 +1,6 @@
-package com.ltslr.shma.config
+package com.ltslr.gibbi.config
 
-import com.ltslr.shma.auth.JwtAuthFilter
+import com.ltslr.gibbi.auth.JwtAuthFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -28,6 +28,7 @@ class SecurityConfig(
             }
             authorizeHttpRequests {
                 authorize("/auth/**", permitAll)
+                authorize("/realtime", permitAll)
                 authorize("/actuator/health", permitAll)
                 authorize("/error", permitAll)
                 authorize(anyRequest, authenticated)

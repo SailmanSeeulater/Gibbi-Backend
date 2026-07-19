@@ -1,4 +1,4 @@
-package com.ltslr.shma.auth
+package com.ltslr.gibbi.auth
 
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping

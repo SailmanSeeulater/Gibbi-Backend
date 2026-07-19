@@ -1,4 +1,4 @@
-package com.ltslr.shma.user
+package com.ltslr.gibbi.user
 
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID

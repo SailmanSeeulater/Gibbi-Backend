@@ -1,4 +1,4 @@
-package com.ltslr.shma.messaging
+package com.ltslr.gibbi.messaging
 
 interface PushService {
     // Wake a device so it fetches its mailbox. No message content ever crosses the push channel

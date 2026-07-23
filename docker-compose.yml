@@ -7,8 +7,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-messaging}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
-    ports:
-      - "5432:5432"
     volumes:
       - gibbi_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -29,6 +27,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?required}
       JWT_SECRET: ${JWT_SECRET:?required}
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8081:8080"
 volumes:
   gibbi_pgdata:

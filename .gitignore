@@ -5,3 +5,5 @@ build/
 local.properties
 *.json
 *.log
+
+.env

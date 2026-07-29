@@ -38,11 +38,60 @@ JWT: HMAC-SHA512, subject = username, 24h expiry (`jwt.expiration-ms`).
 
 ## Key directory
 
-> **TBD — not yet transcribed.** `POST /keys`, `GET /keys/{username}`, and `GET /keys/count` exist in the backend (`keys/KeyController.kt`, `keys/KeyDtos.kt`) inherited from SHMA, but their exact DTO shapes have not been written down here yet. Fill this in from the source before Phase 2's key-directory work — do not guess at field names.
->
-> Known constraints:
-> - The upload payload includes the three Kyber fields: `kyber_prekey_id`, `kyber_prekey` (column `length=4000`), `kyber_prekey_signature`.
-> - `GET /keys/{username}` is **consume-on-fetch**: the one-time prekey is deleted atomically on retrieval.
+### `POST /keys`
+Uploads (replaces) the caller's key bundle: identity key, signed prekey, Kyber prekey, and a batch of one-time prekeys.
+
+```json
+{
+  "registrationId": 12345,
+  "identityKey": "<base64>",
+  "signedPreKeyId": 1,
+  "signedPreKey": "<base64>",
+  "signedPreKeySignature": "<base64>",
+  "oneTimePreKeys": [
+    { "keyId": 1, "publicKey": "<base64>" },
+    { "keyId": 2, "publicKey": "<base64>" }
+  ],
+  "kyberPreKeyId": 1,
+  "kyberPreKey": "<base64, ~1.5-2KB — column is length=4000>",
+  "kyberPreKeySignature": "<base64>"
+}
+```
+→ `204 No Content`
+
+All string fields are base64-encoded key material; the server stores and returns them opaquely, same as ciphertext elsewhere in this contract. Call this once at registration/first-launch, and again whenever `GET /keys/count` reports the one-time prekey supply is running low (replenishment — not yet implemented client-side).
+
+**Known server-side quirk:** `kyberPreKeyId` is annotated `@NotBlank` in `UploadKeysRequest`, which is a no-op on an `Int` — it does not actually validate this field. Not client-relevant, but don't rely on the server rejecting a missing/zero value here.
+
+### `GET /keys/count`
+→ `200`
+```json
+{ "count": 17 }
+```
+Returns the caller's own remaining one-time prekey count (server reads identity from the JWT — no username param). Useasdfa this to deccasdfide when to call `POST /keys` again with a fresh batch.
+
+### `GET /keys/{username}`
+Fetches a prekey bundle for starting a session with `{username}`. **Consume-on-fetch**: the returned one-time prekey (if any) is deleted server-side atomically with this read, so it is never handed out twice.
+
+→ `200`
+```json
+{
+  "registrationId": 12345,
+  "identityKey": "<base64>",
+  "signedPreKeyId": 1,
+  "signedPreKey": "<base64>",
+  "signedPreKeySignature": "<base64>",
+  "oneTimePreKeyId": 3,
+  "oneTimePreKey": "<base64>",
+  "kyberPreKeyId": 1,
+  "kyberPreKey": "<base64>",
+  "kyberPreKeySignature": "<base64>"
+}
+```
+
+`oneTimePreKeyId` / `oneTimePreKey` are **nullable** — if the target user's one-time prekeys are exhausted, PQXDH can still proceed using just the signed prekey + Kyber prekey (weaker forward secrecy for that session, but not blocked). The client must handle the null case rather than assume a one-time key is always present.
+
+This endpoint is unauthenticated at the route level (no `Authentication` param in the controller) — but recall `SecurityConfig`'s `anyRequest → authenticated` rule still applies, so a valid Bearer token is required to reach it; the *recipient* username just comes from the path, not the caller's identity.
 
 ---
 
